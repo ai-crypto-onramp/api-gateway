@@ -1,5 +1,7 @@
 # API Gateway / BFF
 
+![CI](https://github.com/ai-crypto-onramp/api-gateway/actions/workflows/ci.yml/badge.svg)
+
 Public edge service for the crypto on-ramp — handles AuthN/Z, rate limiting, request shaping, and aggregates backend calls for web, mobile, and partner SDKs.
 
 ## Overview / Responsibilities
