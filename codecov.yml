@@ -10,5 +10,5 @@ coverage:
 comment: false
 
 ignore:
-  - "**/*.test.ts"
-  - "dist/**"
+  - '**/*.test.ts'
+  - 'dist/**'

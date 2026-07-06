@@ -62,27 +62,27 @@ Public edge service for the crypto on-ramp — handles AuthN/Z, rate limiting, r
 
 ### Endpoints (sample)
 
-| Method | Path | Description | Downstream |
-|---|---|---|---|
-| `POST` | `/v1/auth/session` | Exchange/refresh session token | identity-auth |
-| `GET`  | `/v1/me` | Current user profile + KYC status (aggregated) | identity-auth, onboarding-kyc |
-| `POST` | `/v1/quotes` | Request a price quote with rate lock | pricing-quote |
-| `POST` | `/v1/transactions` | Initiate a buy transaction | transaction-orchestrator |
-| `GET`  | `/v1/transactions/:id` | Transaction status (aggregated with ledger state) | transaction-orchestrator |
-| `GET`  | `/v1/transactions` | Paginated transaction history | transaction-orchestrator |
-| `POST` | `/v1/kyc/start` | Begin KYC flow | onboarding-kyc |
-| `GET`  | `/v1/kyc/status` | KYC verification status | onboarding-kyc |
-| `POST` | `/v1/partner/webhooks` | Register partner webhook URL | identity-auth (partner registry) |
-| `GET`  | `/healthz` / `/readyz` | Liveness / readiness probes | local |
+| Method | Path                   | Description                                       | Downstream                       |
+| ------ | ---------------------- | ------------------------------------------------- | -------------------------------- |
+| `POST` | `/v1/auth/session`     | Exchange/refresh session token                    | identity-auth                    |
+| `GET`  | `/v1/me`               | Current user profile + KYC status (aggregated)    | identity-auth, onboarding-kyc    |
+| `POST` | `/v1/quotes`           | Request a price quote with rate lock              | pricing-quote                    |
+| `POST` | `/v1/transactions`     | Initiate a buy transaction                        | transaction-orchestrator         |
+| `GET`  | `/v1/transactions/:id` | Transaction status (aggregated with ledger state) | transaction-orchestrator         |
+| `GET`  | `/v1/transactions`     | Paginated transaction history                     | transaction-orchestrator         |
+| `POST` | `/v1/kyc/start`        | Begin KYC flow                                    | onboarding-kyc                   |
+| `GET`  | `/v1/kyc/status`       | KYC verification status                           | onboarding-kyc                   |
+| `POST` | `/v1/partner/webhooks` | Register partner webhook URL                      | identity-auth (partner registry) |
+| `GET`  | `/healthz` / `/readyz` | Liveness / readiness probes                       | local                            |
 
 ### Integrations (downstream)
 
-| Service | Purpose | Protocol |
-|---|---|---|
-| `identity-auth` | User/session validation, RBAC, partner API keys | REST/gRPC |
-| `onboarding-kyc` | KYC status and flow initiation | REST/gRPC |
-| `pricing-quote` | Real-time quotes with rate lock | REST/gRPC |
-| `transaction-orchestrator` | Transaction saga lifecycle | REST/gRPC |
+| Service                    | Purpose                                         | Protocol  |
+| -------------------------- | ----------------------------------------------- | --------- |
+| `identity-auth`            | User/session validation, RBAC, partner API keys | REST/gRPC |
+| `onboarding-kyc`           | KYC status and flow initiation                  | REST/gRPC |
+| `pricing-quote`            | Real-time quotes with rate lock                 | REST/gRPC |
+| `transaction-orchestrator` | Transaction saga lifecycle                      | REST/gRPC |
 
 All downstream calls go through a shared HTTP client with connection pooling, circuit breakers (e.g., `opossum`), per-service timeouts, and OpenTelemetry tracing spans.
 
@@ -127,29 +127,29 @@ All downstream calls go through a shared HTTP client with connection pooling, ci
 
 All configuration is via environment variables. Defaults shown where applicable.
 
-| Variable | Description | Example / Default |
-|---|---|---|
-| `PORT` | HTTP port the gateway listens on | `8080` |
-| `LOG_LEVEL` | `pino` log level | `info` |
-| `NODE_ENV` | Environment name | `production` |
-| `IDENTITY_AUTH_URL` | Base URL for identity-auth service | `http://identity-auth.internal:8080` |
-| `KYC_URL` | Base URL for onboarding-kyc service | `http://onboarding-kyc.internal:8080` |
-| `PRICING_URL` | Base URL for pricing-quote service | `http://pricing-quote.internal:8080` |
-| `ORCHESTRATOR_URL` | Base URL for transaction-orchestrator | `http://transaction-orchestrator.internal:8080` |
-| `RATE_LIMIT_RPS` | Default token-bucket refill rate (RPS) | `10` |
-| `RATE_LIMIT_BURST` | Default token-bucket burst size | `20` |
-| `RATE_LIMIT_REDIS_URL` | Redis connection string for shared limiter | `redis://rate-limit.internal:6379` |
-| `JWT_ISSUER` | Expected JWT issuer claim | `https://auth.example.com` |
-| `JWKS_URL` | Identity-auth JWKS endpoint | `https://auth.example.com/.well-known/jwks.json` |
-| `JWT_AUDIENCE` | Expected JWT audience | `onramp-sdk` |
-| `PARTNER_API_KEY_HEADER` | Header name for partner API keys | `X-API-Key` |
-| `DOWNSTREAM_TIMEOUT_MS` | Default timeout for downstream calls | `5000` |
-| `CIRCUIT_BREAKER_THRESHOLD` | Error % to trip a downstream breaker | `50` |
-| `CORS_ALLOWED_ORIGINS` | Comma-separated allow-list | `https://app.example.com` |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | OTLP collector endpoint | `http://otel-collector.internal:4318` |
-| `OTEL_SERVICE_NAME` | Service name reported in traces | `api-gateway` |
-| `ENABLE_GRAPHQL` | Toggle the `/v1/graphql` BFF endpoint | `false` |
-| `WEBHOOK_SIGNING_SECRET` | Secret for signing outbound partner webhooks | (from secrets manager) |
+| Variable                      | Description                                  | Example / Default                                |
+| ----------------------------- | -------------------------------------------- | ------------------------------------------------ |
+| `PORT`                        | HTTP port the gateway listens on             | `8080`                                           |
+| `LOG_LEVEL`                   | `pino` log level                             | `info`                                           |
+| `NODE_ENV`                    | Environment name                             | `production`                                     |
+| `IDENTITY_AUTH_URL`           | Base URL for identity-auth service           | `http://identity-auth.internal:8080`             |
+| `KYC_URL`                     | Base URL for onboarding-kyc service          | `http://onboarding-kyc.internal:8080`            |
+| `PRICING_URL`                 | Base URL for pricing-quote service           | `http://pricing-quote.internal:8080`             |
+| `ORCHESTRATOR_URL`            | Base URL for transaction-orchestrator        | `http://transaction-orchestrator.internal:8080`  |
+| `RATE_LIMIT_RPS`              | Default token-bucket refill rate (RPS)       | `10`                                             |
+| `RATE_LIMIT_BURST`            | Default token-bucket burst size              | `20`                                             |
+| `RATE_LIMIT_REDIS_URL`        | Redis connection string for shared limiter   | `redis://rate-limit.internal:6379`               |
+| `JWT_ISSUER`                  | Expected JWT issuer claim                    | `https://auth.example.com`                       |
+| `JWKS_URL`                    | Identity-auth JWKS endpoint                  | `https://auth.example.com/.well-known/jwks.json` |
+| `JWT_AUDIENCE`                | Expected JWT audience                        | `onramp-sdk`                                     |
+| `PARTNER_API_KEY_HEADER`      | Header name for partner API keys             | `X-API-Key`                                      |
+| `DOWNSTREAM_TIMEOUT_MS`       | Default timeout for downstream calls         | `5000`                                           |
+| `CIRCUIT_BREAKER_THRESHOLD`   | Error % to trip a downstream breaker         | `50`                                             |
+| `CORS_ALLOWED_ORIGINS`        | Comma-separated allow-list                   | `https://app.example.com`                        |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | OTLP collector endpoint                      | `http://otel-collector.internal:4318`            |
+| `OTEL_SERVICE_NAME`           | Service name reported in traces              | `api-gateway`                                    |
+| `ENABLE_GRAPHQL`              | Toggle the `/v1/graphql` BFF endpoint        | `false`                                          |
+| `WEBHOOK_SIGNING_SECRET`      | Secret for signing outbound partner webhooks | (from secrets manager)                           |
 
 ## Local Development
 
