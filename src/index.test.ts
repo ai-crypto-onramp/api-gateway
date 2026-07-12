@@ -50,7 +50,7 @@ describe("start", () => {
     const returned = start(fakeApp);
 
     expect(returned).toBe(fakeApp);
-    expect(listen).toHaveBeenCalledWith({ port: 8080 });
+    expect(listen).toHaveBeenCalledWith({ port: 8080, host: "0.0.0.0" });
   });
 
   it("logs the error and exits when listen fails", async () => {
