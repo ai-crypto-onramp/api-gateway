@@ -10,11 +10,15 @@ export function buildServer(): FastifyInstance {
   return app;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const app = buildServer();
+export function start(app: FastifyInstance = buildServer()): FastifyInstance {
   const port = Number(process.env.PORT ?? 8080);
   app.listen({ port }).catch((err) => {
     app.log.error(err);
     process.exit(1);
   });
+  return app;
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  start();
 }
