@@ -10,17 +10,17 @@ export const ConfigSchema = z.object({
   LOG_LEVEL: z.string().default("info"),
   NODE_ENV: z.string().default("production"),
 
-  IDENTITY_AUTH_URL: z.string().url(),
-  KYC_URL: z.string().url(),
-  PRICING_URL: z.string().url(),
-  ORCHESTRATOR_URL: z.string().url(),
+  IDENTITY_AUTH_URL: z.string().url().default("http://identity-auth.internal:8080"),
+  KYC_URL: z.string().url().default("http://onboarding-kyc.internal:8080"),
+  PRICING_URL: z.string().url().default("http://pricing-quote.internal:8080"),
+  ORCHESTRATOR_URL: z.string().url().default("http://transaction-orchestrator.internal:8080"),
 
   RATE_LIMIT_RPS: z.coerce.number().int().positive().default(10),
   RATE_LIMIT_BURST: z.coerce.number().int().positive().default(20),
   RATE_LIMIT_REDIS_URL: z.string().default(""),
 
-  JWT_ISSUER: z.string(),
-  JWKS_URL: z.string().url(),
+  JWT_ISSUER: z.string().default("https://auth.example.com"),
+  JWKS_URL: z.string().url().default("https://auth.example.com/.well-known/jwks.json"),
   JWT_AUDIENCE: z.string().default("onramp-sdk"),
 
   PARTNER_API_KEY_HEADER: z.string().default("X-API-Key"),

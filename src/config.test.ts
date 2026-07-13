@@ -17,8 +17,11 @@ describe("config", () => {
     expect(cfg.ENABLE_GRAPHQL).toBe(false);
   });
 
-  it("fails fast on missing required URL", () => {
-    expect(() => loadConfig({})).toThrow(/Invalid configuration/);
+  it("applies defaults when required URLs are unset", () => {
+    const cfg = loadConfig({});
+    expect(cfg.IDENTITY_AUTH_URL).toBe("http://identity-auth.internal:8080");
+    expect(cfg.JWKS_URL).toBe("https://auth.example.com/.well-known/jwks.json");
+    expect(cfg.JWT_ISSUER).toBe("https://auth.example.com");
   });
 
   it("fails fast on invalid URL", () => {
