@@ -175,3 +175,96 @@ npm run lint
 # Run typecheck
 npm run typecheck
 ```
+
+## Deployment
+
+The gateway is packaged as a non-root Docker image built from the
+multi-stage `Dockerfile`. It exposes port `8080` with a `HEALTHCHECK`
+against `/healthz`. Deploy behind a TLS-terminating load balancer with
+rolling updates driven by `/readyz`.
+
+```bash
+docker build -t api-gateway .
+docker run --rm -p 8080:8080 \
+  --env-file .env \
+  -e RATE_LIMIT_REDIS_URL=redis://redis:6379 \
+  api-gateway
+```
+
+`docker compose up` starts the full local stack: the gateway, Redis for
+shared rate-limit state, an OTLP collector for traces, and a mock
+downstream that emulates `identity-auth`, `onboarding-kyc`,
+`pricing-quote`, and `transaction-orchestrator`.
+
+### SLOs
+
+| Metric | Target |
+|---|---|
+| Availability | 99.99% (≤ ~4.5 min downtime/month) |
+| Edge overhead p99 | < 50ms (excluding downstream time) |
+| Edge overhead p99.9 | < 150ms |
+| Sustained throughput | ≥ 10,000 RPS per region |
+
+### Downstream Dependency Map
+
+| Service | Purpose | Circuit breaker | Cache TTL |
+|---|---|---|---|
+| `identity-auth` | sessions, profile, partner registry | 30s reset, 50% threshold | 30s (profile) |
+| `onboarding-kyc` | KYC status & flow | 30s reset, 50% threshold | 15s (status) |
+| `pricing-quote` | quotes with rate lock | 30s reset, 50% threshold | — |
+| `transaction-orchestrator` | transaction saga | 30s reset, 50% threshold | 5s (get) |
+
+### Observability Endpoints
+
+- `GET /healthz` — liveness (always returns `{"status":"ok"}`).
+- `GET /readyz` — readiness; reports `degraded` when Redis is
+  unreachable or any downstream circuit is open.
+- `GET /metrics` — Prometheus text exposition of RED metrics
+  (`http_requests_total`, `http_request_duration_seconds`,
+  `http_requests_errors_total`), `rate_limit_rejections_total`,
+  `downstream_circuit_state`, and `jwks_refresh_total`.
+
+## Troubleshooting / On-Call Runbook
+
+### Circuit breaker trips
+
+Symptom: `downstream_circuit_state{service="X"} == 2` (open) and a
+rise in `http_requests_errors_total{status="503"}`.
+
+1. Check the downstream service health and its own metrics.
+2. The breaker auto-resets after 30s; if it re-opens immediately the
+   downstream is still failing.
+3. Graceful degradation serves last-known-good cached responses for
+   `GET /v1/me` (profile), `GET /v1/kyc/status`, and
+   `GET /v1/transactions/:id` while the breaker is open.
+4. If the downstream is down for a prolonged period, consider draining
+   traffic from affected instances via `/readyz` (returns `degraded`).
+
+### JWKS rotation failure
+
+Symptom: `jwks_refresh_total{result="error"}` increasing and 401s on
+authenticated routes.
+
+1. Verify `JWKS_URL` is reachable from the gateway pods.
+2. The verifier retries on unknown `kid` with a fallback fetch; if the
+   JWKS endpoint itself is down, all new tokens will be rejected.
+3. Rotate the `JWT_ISSUER`/`JWKS_URL` secrets and restart the pods if
+   the issuer changed its JWKS endpoint.
+
+### Redis limiter outage
+
+Symptom: `rate_limit_rejections_total` drops to zero and 429s stop, or
+`/readyz` reports `redis: false`.
+
+1. Confirm `RATE_LIMIT_REDIS_URL` points to a healthy Redis.
+2. If Redis is unavailable, the limiter will fail open or closed
+   depending on configuration; document the expected behavior for your
+   deployment.
+3. Restore Redis; the token-bucket state is shared and recovers
+   automatically once connectivity returns. No gateway restart is
+   required.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branching, commit
+conventions, review, and coverage requirements.

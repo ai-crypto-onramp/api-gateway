@@ -12,14 +12,14 @@ Goal: Stand up the Node.js 20 / TypeScript service skeleton with Fastify, config
 baseline dev/build/test/lint/typecheck scripts matching the README stack.
 
 Tasks:
-- [ ] Initialize `package.json` with Node 20 engine, ESM, and scripts (`dev`, `build`, `start`, `test`, `lint`, `typecheck`).
-- [ ] Set up TypeScript config (`tsconfig.json`) targeting Node 20 with strict mode.
-- [ ] Install and wire Fastify as the HTTP framework with a root plugin registry.
-- [ ] Add `tsx` for dev, `tsc` + `esbuild` bundler config for production build.
-- [ ] Implement typed config loader reading all env vars from the README config table with defaults and validation (zod).
-- [ ] Add `vitest` + `supertest` test harness and a sample smoke test.
-- [ ] Add ESLint + Prettier config consistent with the repo conventions.
-- [ ] Add `.env.example` mirroring the README config table.
+- [x] Initialize `package.json` with Node 20 engine, ESM, and scripts (`dev`, `build`, `start`, `test`, `lint`, `typecheck`).
+- [x] Set up TypeScript config (`tsconfig.json`) targeting Node 20 with strict mode.
+- [x] Install and wire Fastify as the HTTP framework with a root plugin registry.
+- [x] Add `tsx` for dev, `tsc` + `esbuild` bundler config for production build.
+- [x] Implement typed config loader reading all env vars from the README config table with defaults and validation (zod).
+- [x] Add `vitest` + `supertest` test harness and a sample smoke test.
+- [x] Add ESLint + Prettier config consistent with the repo conventions.
+- [x] Add `.env.example` mirroring the README config table.
 
 Acceptance criteria:
 - `npm run dev`, `npm run build`, `npm start`, `npm test`, `npm run lint`, `npm run typecheck` all succeed on an empty app.
@@ -32,13 +32,13 @@ Goal: Define the typed domain models, request/response schemas, and shared error
 that endpoint handlers and integrations will build on.
 
 Tasks:
-- [ ] Define zod schemas for all client-facing request/response bodies (auth session, `/me`, quotes, transactions, KYC, partner webhooks).
-- [ ] Define enums for client-facing transaction status (translated from orchestrator saga state) and KYC status.
-- [ ] Implement a centralized error model (`ApiError`) mapping domain errors to fastify error replies with stable error codes.
-- [ ] Implement idempotency-key header parsing/validation utility.
-- [ ] Implement request-ID generation and propagation utility.
-- [ ] Define paginated response envelope shape.
-- [ ] Add unit tests for schemas and error mapping.
+- [x] Define zod schemas for all client-facing request/response bodies (auth session, `/me`, quotes, transactions, KYC, partner webhooks).
+- [x] Define enums for client-facing transaction status (translated from orchestrator saga state) and KYC status.
+- [x] Implement a centralized error model (`ApiError`) mapping domain errors to fastify error replies with stable error codes.
+- [x] Implement idempotency-key header parsing/validation utility.
+- [x] Implement request-ID generation and propagation utility.
+- [x] Define paginated response envelope shape.
+- [x] Add unit tests for schemas and error mapping.
 
 Acceptance criteria:
 - Every endpoint in the README table has request and response zod schemas with tests.
@@ -51,17 +51,17 @@ Goal: Implement the REST `/v1/*` endpoint surface from the README as handlers th
 call downstream clients (mocked at this stage), and shape aggregated BFF responses.
 
 Tasks:
-- [ ] Register `/healthz` and `/readyz` routes (readyz stubbed to healthy).
-- [ ] Implement `POST /v1/auth/session` (exchange/refresh).
-- [ ] Implement `GET /v1/me` (aggregated profile + KYC status).
-- [ ] Implement `POST /v1/quotes` (forward to pricing, rate lock).
-- [ ] Implement `POST /v1/transactions` (initiate; forward `Idempotency-Key`).
-- [ ] Implement `GET /v1/transactions/:id` (status aggregated with ledger state).
-- [ ] Implement `GET /v1/transactions` (paginated history).
-- [ ] Implement `POST /v1/kyc/start` and `GET /v1/kyc/status`.
-- [ ] Implement `POST /v1/partner/webhooks` (register webhook URL).
-- [ ] Add version negotiation (`/v1`, `/v2`) and sunset/deprecation header support.
-- [ ] Add CORS plugin with allow-list from `CORS_ALLOWED_ORIGINS` and security headers (HSTS, CSP).
+- [x] Register `/healthz` and `/readyz` routes (readyz stubbed to healthy).
+- [x] Implement `POST /v1/auth/session` (exchange/refresh).
+- [x] Implement `GET /v1/me` (aggregated profile + KYC status).
+- [x] Implement `POST /v1/quotes` (forward to pricing, rate lock).
+- [x] Implement `POST /v1/transactions` (initiate; forward `Idempotency-Key`).
+- [x] Implement `GET /v1/transactions/:id` (status aggregated with ledger state).
+- [x] Implement `GET /v1/transactions` (paginated history).
+- [x] Implement `POST /v1/kyc/start` and `GET /v1/kyc/status`.
+- [x] Implement `POST /v1/partner/webhooks` (register webhook URL).
+- [x] Add version negotiation (`/v1`, `/v2`) and sunset/deprecation header support.
+- [x] Add CORS plugin with allow-list from `CORS_ALLOWED_ORIGINS` and security headers (HSTS, CSP).
 
 Acceptance criteria:
 - All routes return shaped, schema-validated responses using mocked downstream clients.
@@ -76,15 +76,15 @@ and wire real calls to `identity-auth`, `onboarding-kyc`, `pricing-quote`, and
 `transaction-orchestrator`.
 
 Tasks:
-- [ ] Implement a shared downstream client factory using `undici` with per-service connection pools.
-- [ ] Integrate `opossum` circuit breakers per downstream service using `CIRCUIT_BREAKER_THRESHOLD`.
-- [ ] Apply per-service timeouts from `DOWNSTREAM_TIMEOUT_MS` and bulkhead concurrency limits.
-- [ ] Implement retries-with-jitter only on idempotent downstream calls.
-- [ ] Inject W3C tracecontext headers on every downstream call and record OTel spans.
-- [ ] Attach an internal service token (mTLS or signed JWT) to downstream calls.
-- [ ] Implement graceful degradation: return cached/last-known-good where applicable when a downstream is unavailable.
-- [ ] Wire each handler from Stage 3 to its real downstream client(s).
-- [ ] Add contract tests against downstream mocks simulating timeouts, 5xx, and circuit-open states.
+- [x] Implement a shared downstream client factory using `undici` with per-service connection pools.
+- [x] Integrate `opossum` circuit breakers per downstream service using `CIRCUIT_BREAKER_THRESHOLD`.
+- [x] Apply per-service timeouts from `DOWNSTREAM_TIMEOUT_MS` and bulkhead concurrency limits.
+- [x] Implement retries-with-jitter only on idempotent downstream calls.
+- [x] Inject W3C tracecontext headers on every downstream call and record OTel spans.
+- [x] Attach an internal service token (mTLS or signed JWT) to downstream calls.
+- [x] Implement graceful degradation: return cached/last-known-good where applicable when a downstream is unavailable.
+- [x] Wire each handler from Stage 3 to its real downstream client(s).
+- [x] Add contract tests against downstream mocks simulating timeouts, 5xx, and circuit-open states.
 
 Acceptance criteria:
 - Every downstream call goes through the shared client with pooling, timeout, breaker, and tracing.
@@ -98,14 +98,14 @@ Goal: Implement AuthN/Z for end-user SDK (JWT/JWKS), partner SDK (API key), and 
 token issuance for downstream calls, plus RBAC scope enforcement per route.
 
 Tasks:
-- [ ] Implement JWT (RS256) verification with `jose` and JWKS via `jwks-rsa` (cached + refreshed on timer; fallback fetch on unknown `kid`).
-- [ ] Validate `iss`, `aud` (`JWT_AUDIENCE`), and exp; reject invalid tokens with 401.
-- [ ] Implement per-route RBAC scope checks (e.g., `tx:write`, `kyc:read`).
-- [ ] Implement partner API key auth via `X-API-Key` verified against identity-auth partner registry; map to internal identity.
-- [ ] Implement issuance/signing of internal service token for downstream calls (mTLS or signed JWT).
-- [ ] Forward partner/user identity to downstreams as internal credentials.
-- [ ] Add optional mTLS support for partner traffic.
-- [ ] Add tests for valid/invalid/expired tokens, unknown `kid`, missing scopes, and invalid API keys.
+- [x] Implement JWT (RS256) verification with `jose` and JWKS via `jwks-rsa` (cached + refreshed on timer; fallback fetch on unknown `kid`).
+- [x] Validate `iss`, `aud` (`JWT_AUDIENCE`), and exp; reject invalid tokens with 401.
+- [x] Implement per-route RBAC scope checks (e.g., `tx:write`, `kyc:read`).
+- [x] Implement partner API key auth via `X-API-Key` verified against identity-auth partner registry; map to internal identity.
+- [x] Implement issuance/signing of internal service token for downstream calls (mTLS or signed JWT).
+- [x] Forward partner/user identity to downstreams as internal credentials.
+- [x] Add optional mTLS support for partner traffic.
+- [x] Add tests for valid/invalid/expired tokens, unknown `kid`, missing scopes, and invalid API keys.
 
 Acceptance criteria:
 - End-user routes reject unauthenticated or insufficient-scope requests with 401/403.
@@ -119,14 +119,14 @@ Goal: Implement Redis-backed token-bucket rate limiting across per-API-key, per-
 dimensions with tiered burst/refill, `429` responses, and rate-limit headers.
 
 Tasks:
-- [ ] Integrate Redis client (`@redis/client` or `ioredis`) using `RATE_LIMIT_REDIS_URL`.
-- [ ] Implement token-bucket limiter with shared state in Redis (atomic Lua/script).
-- [ ] Apply dimensions: per API key (partner), per user ID (SDK), per source IP (anonymous/auth-failed).
-- [ ] Implement configurable tiers and per-key overrides (end-user 10 RPS / burst 20; partner 100 RPS / burst 200).
-- [ ] Return `429` with `Retry-After` and `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` headers.
-- [ ] Wire limiter as a Fastify preHandler keyed by auth dimension.
-- [ ] Add `rate_limit_rejections_total` metric.
-- [ ] Add tests covering tier enforcement, header correctness, and Redis-down behavior.
+- [x] Integrate Redis client (`@redis/client` or `ioredis`) using `RATE_LIMIT_REDIS_URL`.
+- [x] Implement token-bucket limiter with shared state in Redis (atomic Lua/script).
+- [x] Apply dimensions: per API key (partner), per user ID (SDK), per source IP (anonymous/auth-failed).
+- [x] Implement configurable tiers and per-key overrides (end-user 10 RPS / burst 20; partner 100 RPS / burst 200).
+- [x] Return `429` with `Retry-After` and `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` headers.
+- [x] Wire limiter as a Fastify preHandler keyed by auth dimension.
+- [x] Add `rate_limit_rejections_total` metric.
+- [x] Add tests covering tier enforcement, header correctness, and Redis-down behavior.
 
 Acceptance criteria:
 - Limit is enforced consistently across instances via shared Redis state.
@@ -140,14 +140,14 @@ Goal: Implement full observability — OpenTelemetry tracing, structured `pino` 
 RED metrics, and readiness checks reflecting downstream/Redis health.
 
 Tasks:
-- [ ] Initialize OpenTelemetry SDK with auto-instrumentation for Fastify, `undici`, and Redis; export via OTLP to `OTEL_EXPORTER_OTLP_ENDPOINT`.
-- [ ] Propagate W3C tracecontext both inbound (extract) and outbound (inject to downstreams).
-- [ ] Configure `pino` structured JSON logs with request ID, hashed user ID, route, status, latency; no PII/secrets.
-- [ ] Implement `prom-client` RED metrics per route (`http_requests_total`, `http_request_duration_seconds`, `http_requests_errors_total`).
-- [ ] Add gateway-specific metrics (`rate_limit_rejections_total`, `downstream_circuit_state`, `jwks_refresh_total`).
-- [ ] Expose `/metrics` (or a configured endpoint) for Prometheus scrape.
-- [ ] Implement `/readyz` checking downstream reachability + Redis connectivity; `/healthz` remains liveness-only.
-- [ ] Add tests asserting trace/header propagation and metric label cardinality.
+- [x] Initialize OpenTelemetry SDK with auto-instrumentation for Fastify, `undici`, and Redis; export via OTLP to `OTEL_EXPORTER_OTLP_ENDPOINT`.
+- [x] Propagate W3C tracecontext both inbound (extract) and outbound (inject to downstreams).
+- [x] Configure `pino` structured JSON logs with request ID, hashed user ID, route, status, latency; no PII/secrets.
+- [x] Implement `prom-client` RED metrics per route (`http_requests_total`, `http_request_duration_seconds`, `http_requests_errors_total`).
+- [x] Add gateway-specific metrics (`rate_limit_rejections_total`, `downstream_circuit_state`, `jwks_refresh_total`).
+- [x] Expose `/metrics` (or a configured endpoint) for Prometheus scrape.
+- [x] Implement `/readyz` checking downstream reachability + Redis connectivity; `/healthz` remains liveness-only.
+- [x] Add tests asserting trace/header propagation and metric label cardinality.
 
 Acceptance criteria:
 - 100% of requests carry a propagated trace ID end-to-end.
@@ -161,12 +161,12 @@ Goal: Add the optional `/v1/graphql` stitched-schema BFF endpoint and the partne
 registration/signing flow.
 
 Tasks:
-- [ ] Gate GraphQL behind `ENABLE_GRAPHQL`; add Apollo Server or Mercurius integration with Fastify.
-- [ ] Stitch schemas from downstream services for dashboard/bootstrap-style aggregated queries (REST remains source of truth).
-- [ ] Reuse AuthN/Z, rate limiting, tracing, and metrics on the GraphQL endpoint.
-- [ ] Implement partner webhook registration validation (URL reachability/ownership check).
-- [ ] Implement outbound webhook payload signing using `WEBHOOK_SIGNING_SECRET` (HMAC) with replay protection.
-- [ ] Add tests for GraphQL auth/scope enforcement and webhook signing/verification.
+- [x] Gate GraphQL behind `ENABLE_GRAPHQL`; add Apollo Server or Mercurius integration with Fastify.
+- [x] Stitch schemas from downstream services for dashboard/bootstrap-style aggregated queries (REST remains source of truth).
+- [x] Reuse AuthN/Z, rate limiting, tracing, and metrics on the GraphQL endpoint.
+- [x] Implement partner webhook registration validation (URL reachability/ownership check).
+- [x] Implement outbound webhook payload signing using `WEBHOOK_SIGNING_SECRET` (HMAC) with replay protection.
+- [x] Add tests for GraphQL auth/scope enforcement and webhook signing/verification.
 
 Acceptance criteria:
 - GraphQL disabled by default; enabling it does not affect REST surface.
@@ -180,12 +180,12 @@ Goal: Drive unit/integration coverage to target and verify NFRs (p99 edge overhe
 resilience) with targeted performance tests.
 
 Tasks:
-- [ ] Achieve ≥ 90% line coverage across handlers, client, auth, and limiter modules.
-- [ ] Add end-to-end integration suite with all downstreams mocked + Redis in testcontainer.
-- [ ] Add fault-injection tests: downstream timeout, 5xx storm, breaker open, Redis unavailability.
-- [ ] Add a load test script (k6 or autocannon) validating p99 < 50ms edge overhead and ≥ 10k RPS sustainability.
-- [ ] Verify zero-downtime readiness during rolling deploy (health probes + graceful shutdown).
-- [ ] Add memory/CPU regression guard under sustained load.
+- [x] Achieve ≥ 90% line coverage across handlers, client, auth, and limiter modules.
+- [x] Add end-to-end integration suite with all downstreams mocked + Redis in testcontainer.
+- [x] Add fault-injection tests: downstream timeout, 5xx storm, breaker open, Redis unavailability.
+- [x] Add a load test script (k6 or autocannon) validating p99 < 50ms edge overhead and ≥ 10k RPS sustainability.
+- [x] Verify zero-downtime readiness during rolling deploy (health probes + graceful shutdown).
+- [x] Add memory/CPU regression guard under sustained load.
 
 Acceptance criteria:
 - Coverage threshold enforced in CI; failures block merge.
@@ -198,13 +198,13 @@ Acceptance criteria:
 Goal: Productionize packaging, CI pipeline, and developer documentation.
 
 Tasks:
-- [ ] Add multi-stage `Dockerfile` (build with esbuild, slim runtime image, non-root user).
-- [ ] Add `docker-compose.yml` for local dev with Redis + OTLP collector + downstream mocks.
-- [ ] Add GitHub Actions CI workflow: lint, typecheck, test, coverage upload to Codecov, build.
-- [ ] Add release/semantic-version workflow and container image publish.
-- [ ] Write `CONTRIBUTING.md` (branching, commit conventions, review, coverage requirements).
-- [ ] Expand README with runbook sections: config matrix, deployment, SLOs, troubleshooting, downstream dependency map.
-- [ ] Document on-call runbook for breaker trips, JWKS rotation failures, and Redis limiter outages.
+- [x] Add multi-stage `Dockerfile` (build with esbuild, slim runtime image, non-root user).
+- [x] Add `docker-compose.yml` for local dev with Redis + OTLP collector + downstream mocks.
+- [x] Add GitHub Actions CI workflow: lint, typecheck, test, coverage upload to Codecov, build.
+- [x] Add release/semantic-version workflow and container image publish.
+- [x] Write `CONTRIBUTING.md` (branching, commit conventions, review, coverage requirements).
+- [x] Expand README with runbook sections: config matrix, deployment, SLOs, troubleshooting, downstream dependency map.
+- [x] Document on-call runbook for breaker trips, JWKS rotation failures, and Redis limiter outages.
 
 Acceptance criteria:
 - `docker build` produces a working image that passes `/healthz` and `/readyz`.
