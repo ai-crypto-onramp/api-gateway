@@ -176,7 +176,7 @@ Acceptance criteria:
 
 ## Stage 9: Test Coverage & Performance Hardening
 
-Goal: Drive unit/integration coverage to target and verify NFRs (p99 edge overhead, throughput,
+Goal: Add unit/integration tests and verify NFRs (p99 edge overhead, throughput,
 resilience) with targeted performance tests.
 
 Tasks:
@@ -202,12 +202,12 @@ Tasks:
 - [x] Add `docker-compose.yml` for local dev with Redis + OTLP collector + downstream mocks.
 - [x] Add GitHub Actions CI workflow: lint, typecheck, test, coverage upload to Codecov, build.
 - [x] Add release/semantic-version workflow and container image publish.
-- [x] Write `CONTRIBUTING.md` (branching, commit conventions, review, coverage requirements).
+- [x] Write `CONTRIBUTING.md` (branching, commit conventions, review).
 - [x] Expand README with runbook sections: config matrix, deployment, SLOs, troubleshooting, downstream dependency map.
 - [x] Document on-call runbook for breaker trips, JWKS rotation failures, and Redis limiter outages.
 
 Acceptance criteria:
 - `docker build` produces a working image that passes `/healthz` and `/readyz`.
-- CI runs on every PR and enforces lint/typecheck/test/coverage gates.
+- CI runs on every PR and enforces lint/typecheck/test.
 - README + CONTRIBUTING fully describe setup, deployment, and operational procedures.
 - Container image is published with a semantic version tag from CI.

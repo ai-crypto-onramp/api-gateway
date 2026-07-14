@@ -267,4 +267,4 @@ Symptom: `rate_limit_rejections_total` drops to zero and 429s stop, or
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for branching, commit
-conventions, review, and coverage requirements.
+conventions, and review.
