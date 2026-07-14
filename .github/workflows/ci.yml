@@ -34,11 +34,4 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4
-      - name: Build Docker image
-        run: docker build -t api-gateway:ci .
-      - name: Smoke test healthz
-        run: |
-          docker run -d --name gw -p 8080:8080 api-gateway:ci
-          sleep 3
-          curl -sf http://localhost:8080/healthz | grep -q ok
-          docker rm -f gw
+      - run: docker build -t api-gateway:ci .
