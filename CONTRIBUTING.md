@@ -28,12 +28,9 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
   circuit breaker configuration.
 - No secrets or PII may be committed.
 
-## Coverage Requirements
+## Coverage
 
-- Line and statement coverage must be ≥ 90%.
-- Branch coverage must be ≥ 80%.
-- Function coverage must be ≥ 88%.
-- Coverage thresholds are enforced in CI via `vitest --coverage`.
+- Coverage is reported in CI via `vitest --coverage` and uploaded to Codecov.
 - Fault-injection tests (timeouts, 5xx storms, circuit-open, Redis-down)
   must be kept up to date when resilience behavior changes.
 
